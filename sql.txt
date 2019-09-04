@@ -1,0 +1,26 @@
+#####################1 st question##############################
+select name,EmailAddress,FirstName from 
+Sales.Store join Sales.Customer on sales.store.BusinessEntityID=Sales.Customer.StoreID 
+join person.person on Sales.Customer.PersonID=Person.person.BusinessEntityID
+join person.EmailAddress on person.BusinessEntityID=EmailAddress.BusinessEntityID where name='Bike World';
+###################### 2nd question ####################################
+
+select name,city from sales.store join Sales.Customer on sales.Customer.CustomerID=Sales.Store.BusinessEntityID 
+join Person.BusinessEntity on person.BusinessEntity.BusinessEntityID=Sales.Store.BusinessEntityID 
+join Person.BusinessEntityAddress on person.BusinessEntityAddress.BusinessEntityID=Person.BusinessEntity.BusinessEntityID join
+Person.Address on Person.BusinessEntityAddress.AddressID=person.Address.AddressID where City='Dallas';
+
+######################### 3rd question ###############################
+
+select count(*) from salesorderheader where subtotal>1000;
+
+
+####################### 4 th question ##############################
+
+select name,sum(subtotal+Taxamt+freight) from sales.store,sales.SalesOrderHeader where TotalDue>100000 group by name;
+
+####################### 5 th question ###############################
+
+
+
+
