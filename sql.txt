@@ -3,6 +3,8 @@ select name,EmailAddress,FirstName from
 Sales.Store join Sales.Customer on sales.store.BusinessEntityID=Sales.Customer.StoreID 
 join person.person on Sales.Customer.PersonID=Person.person.BusinessEntityID
 join person.EmailAddress on person.BusinessEntityID=EmailAddress.BusinessEntityID where name='Bike World';
+
+
 ###################### 2nd question ####################################
 
 select name,city from sales.store join Sales.Customer on sales.Customer.CustomerID=Sales.Store.BusinessEntityID 
@@ -14,30 +16,60 @@ Person.Address on Person.BusinessEntityAddress.AddressID=person.Address.AddressI
 
 select count(*) from salesorderheader where subtotal>1000;
 
-
 ####################### 4 th question ##############################
 
 select name,sum(subtotal+Taxamt+freight) from sales.store,sales.SalesOrderHeader where TotalDue>100000 group by name;
 
 ####################### 5 th question ###############################
+select sum(sales.SalesOrderDetail.OrderQty) as total
+from sales.SalesOrderDetail
+join production.Product
+on SalesOrderDetail.ProductID = Product.ProductID
+join sales.SalesOrderHeader
+on SalesOrderDetail.SalesOrderID = SalesOrderHeader.SalesOrderID
+join sales.Customer ON SalesOrderHeader.CustomerID = Customer.CustomerID
+join sales.store on sales.Customer.StoreID=sales.store.BusinessEntityID
+where Product.Name = 'Racing Socks, L'
+and store.Name = 'Riding Cycles';
 
 
 ######################### 6 th question ####################################
+select SalesOrderID,UnitPrice from sales.SalesOrderDetail where OrderQty = 1;
 
 
 ############################ 7 th question ######################################
+select distinct(Production.ProductModel.name),sales.store.name from production.ProductModel join 
+Production.Product on Production.ProductModel.ProductModelID=Production.Product.ProductModelID 
+join sales.SalesOrderDetail
+on SalesOrderDetail.ProductID = Product.ProductID
+join sales.SalesOrderHeader
+on SalesOrderDetail.SalesOrderID = SalesOrderHeader.SalesOrderID
+join sales.Customer
+on SalesOrderHeader.CustomerID = Customer.CustomerID
+join sales.store on sales.Customer.StoreID=sales.store.BusinessEntityID
+where ProductModel.Name = 'Racing Socks';
+ 
 
 ########################### 8 th question #########################################
- product model, product table no productid=736 in product model
+select ProductDescription.Description from Production.Product 
+inner join Production.ProductModel on Product.ProductModelID = ProductModel.ProductModelID 
+inner join Production.ProductModelProductDescriptionCulture 
+on ProductModelProductDescriptionCulture.ProductModelID = ProductModel.ProductModelID 
+inner join Production.ProductDescription 
+on ProductDescription.ProductDescriptionID = ProductModelProductDescriptionCulture.ProductDescriptionID 
+inner join production.Culture 
+on ProductModelProductDescriptionCulture.CultureID = Culture.CultureID
+where Culture.CultureID = 'fr' and Product.ProductID = 736;
+
 
 #############################9 th question ######################################
 
-SELECT Store.Name, SalesOrderHeader.SubTotal,orderqty   
-  FROM Sales.Store
-  INNER JOIN Sales.SalesOrderHeader
-  ON Store.SalesPersonID=SalesOrderHeader.SalesPersonID
-  join sales.SalesOrderDetail on SalesOrderHeader.SalesOrderID=SalesOrderDetail.SalesOrderID
-  ORDER BY SalesOrderHeader.SubTotal DESC;
+select Store.Name, SalesOrderHeader.SubTotal,orderqty   
+from Sales.Store
+inner join Sales.SalesOrderHeader
+on Store.SalesPersonID=SalesOrderHeader.SalesPersonID
+join sales.SalesOrderDetail on SalesOrderHeader.SalesOrderID=SalesOrderDetail.SalesOrderID
+order by SalesOrderHeader.SubTotal DESC;
 
 
   select * from sales.SalesOrderDetail;
@@ -45,7 +77,33 @@ SELECT Store.Name, SalesOrderHeader.SubTotal,orderqty
 
 ###############################10 th question #####################################
 
+select count(*) from Production.ProductSubcategory join 
+Production.Product on production.ProductSubcategory.ProductCategoryID=Production.Product.ProductID 
+join Purchasing.ProductVendor on Production.Product.ProductID= Purchasing.ProductVendor.ProductID join 
+purchasing.vendor on Purchasing.ProductVendor.BusinessEntityID=purchasing.vendor.BusinessEntityID join
+Person.BusinessEntity on purchasing.vendor.BusinessEntityID=Person.BusinessEntity.BusinessEntityID join 
+Person.BusinessEntityAddress on Person.BusinessEntity.BusinessEntityID=Person.BusinessEntityAddress.BusinessEntityID join
+person.Address on Person.BusinessEntityAddress.AddressID=Person.Address.AddressID where City='London' or ProductSubcategory.Name='Cranksets';
+
+
+select * from Production.ProductSubcategory;
+select * from production.Product;
+
+
+select * from purchasing.ProductVendor;
+select * from purchasing.Vendor;
+
+select * from Person.BusinessEntity;
+select * from person.BusinessEntityAddress;
+
+
 #################################11 th question ######################################
+
+select AddressLine1,name,Customer.CustomerID from sales.store join Sales.Customer on sales.Customer.CustomerID=Sales.Store.BusinessEntityID 
+join Person.BusinessEntity on person.BusinessEntity.BusinessEntityID=Sales.Store.BusinessEntityID 
+join Person.BusinessEntityAddress on person.BusinessEntityAddress.BusinessEntityID=Person.BusinessEntity.BusinessEntityID join
+Person.Address on Person.BusinessEntityAddress.AddressID=person.Address.AddressID where City='Dallas';
+
 
 ##################################12 th question ######################################
 
