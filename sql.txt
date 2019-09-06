@@ -131,7 +131,11 @@ select count(*) AS numoforders from Sales.SalesOrderHeader where TotalDue>10000
 
 
 #####################################14 th question ######################################
-
+Select top (3) Person.Address.City, Sales.SalesOrderHeader.SubTotal
+FROM Person.Address
+JOIN Sales.SalesOrderHeader
+ON Sales.SalesOrderHeader.ShipToAddressID=Address.AddressID
+ORDER BY Sales.SalesOrderHeader.SubTotal DESC;
 
 
 
