@@ -77,14 +77,13 @@ order by SalesOrderHeader.SubTotal DESC;
 
 ###############################10 th question #####################################
 
-select count(*) from Production.ProductSubcategory join 
-Production.Product on production.ProductSubcategory.ProductCategoryID=Production.Product.ProductID 
-join Purchasing.ProductVendor on Production.Product.ProductID= Purchasing.ProductVendor.ProductID join 
-purchasing.vendor on Purchasing.ProductVendor.BusinessEntityID=purchasing.vendor.BusinessEntityID join
-Person.BusinessEntity on purchasing.vendor.BusinessEntityID=Person.BusinessEntity.BusinessEntityID join 
-Person.BusinessEntityAddress on Person.BusinessEntity.BusinessEntityID=Person.BusinessEntityAddress.BusinessEntityID join
-person.Address on Person.BusinessEntityAddress.AddressID=Person.Address.AddressID where City='London' or ProductSubcategory.Name='Cranksets';
-
+select SUM(sales.SalesOrderDetail.OrderQty)
+from production.ProductSubcategory
+join Production.Product on Product.ProductSubcategoryID=ProductSubcategory.ProductSubcategoryID
+join sales.SalesOrderDetail on  Product.ProductID = SalesOrderDetail.ProductID
+join sales.SalesOrderHeader on SalesOrderDetail.SalesOrderID = SalesOrderHeader.SalesorderID
+join person.Address on SalesOrderHeader.ShipToAddressID =person.Address.AddressID
+where Address.City = 'London' and ProductsubCategory.Name = 'Cranksets';
 
 select * from Production.ProductSubcategory;
 select * from production.Product;
@@ -104,11 +103,18 @@ join Person.BusinessEntity on person.BusinessEntity.BusinessEntityID=Sales.Store
 join Person.BusinessEntityAddress on person.BusinessEntityAddress.BusinessEntityID=Person.BusinessEntity.BusinessEntityID join
 Person.Address on Person.BusinessEntityAddress.AddressID=person.Address.AddressID where City='Dallas';
 
-
 ##################################12 th question ######################################
 
 select SalesOrderHeader.SalesOrderID,SubTotal,sum(orderqty*Unitprice) as mul
 from sales.SalesOrderHeader join Sales.SalesOrderDetail on SalesOrderHeader.SalesOrderID=SalesOrderDetail.SalesOrderID group by SalesOrderHeader.SalesOrderID,SubTotal;
+
+select SalesOrderHeader.SalesOrderID,SalesOrderHeader.SubTotal,sum(SalesOrderDetail.OrderQty * SalesOrderDetail.UnitPrice),sum(SalesOrderDetail.OrderQty * Product.ListPrice)
+from sales.SalesOrderHeader
+join sales.SalesOrderDetail
+on SalesOrderHeader.SalesOrderID = SalesOrderDetail.SalesOrderID
+join production.Product
+on SalesOrderDetail.ProductID = Product.ProductID
+group by SalesOrderHeader.SalesOrderID,SalesOrderHeader.SubTotal;
 
 #####################################13 th question #######################################
 
@@ -121,6 +127,8 @@ select count(*) as nummoforders from Sales.SalesOrderHeader where TotalDue betwe
 select count(*) AS numoforders from Sales.SalesOrderHeader where TotalDue between 100 and 999
 select count(*) AS numoforders from Sales.SalesOrderHeader where TotalDue between 1000 and 9999
 select count(*) AS numoforders from Sales.SalesOrderHeader where TotalDue>10000
+
+
 
 #####################################14 th question ######################################
 
